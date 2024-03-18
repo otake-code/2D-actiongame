@@ -21,7 +21,7 @@ cd prgjissen/Test/fin
 ```
 3. ゲームを実行します。
 ```
-javac GameMaster.java java GameMaster
+javac GameMaster.java ; java GameMaster
 ```
 
 ## 操作方法
