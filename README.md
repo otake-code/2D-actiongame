@@ -1,18 +1,34 @@
-## Getting Started
+# 2D横スクロール型アクションゲーム
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+![ゲームのスクリーンショット](screenshots/gameplay.png)
 
-## Folder Structure
+## 概要
+このプロジェクトは、2D横スクロール型のアクションゲームです。プレイヤーはキャラクターを操作し、敵を避けながら障害物を乗り越え、レベルをクリアしていきます。
 
-The workspace contains two folders by default, where:
+## 特徴
+- 8つの異なるレベルが用意されています。
+- プレイヤーキャラクターにはジャンプやダッシュのアクションがあります。
+- 敵キャラクターやトラップがプレイヤーを妨害します。
+- ゲーム内で集められるアイテムやパワーアップがあります。
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## インストール方法
+1. リポジトリをクローンします。
+git clone https://github.com/otake-code/2Daction.git
+2. ゲームのディレクトリに移動します。
+cd prgjissen/Test/fin
+3. ゲームを実行します。
+javac GameMaster.java java GameMaster
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+## 操作方法
+- 左矢印キー: 左に移動
+- 右矢印キー: 右に移動
+- 上矢印キー: ジャンプ
+- スペースキー: GAMESTART
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
 
-## Dependency Management
+## デモ画像
+![ゲームのデモ](screenshots/demo.gif)
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## ライセンス
+このプロジェクトはMITライセンスのもとで公開されています。詳細については [LICENSE](LICENSE) をご覧ください。
+
