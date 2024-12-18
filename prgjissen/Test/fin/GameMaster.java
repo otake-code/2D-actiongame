@@ -2,63 +2,63 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class GameMaster extends Frame implements Runnable, KeyListener {
-  int  w=640*2, h=320*2;//‰æ–Ê‚Ì‘å‚«‚³
-  int COL =50; //‰¡‚ÌƒuƒƒbƒN‚Ì”
-  int bw = 64*COL;//ƒXƒe[ƒW‰¡‚Ì‘å‚«‚³
-  int bh= 64*10;//ƒXƒe[ƒWc‚Ì‘å‚«‚³
-  Thread   th;     // ƒXƒŒƒbƒhƒIƒuƒWƒFƒNƒg
-  Image    buf;    // ‰¼‚Ì‰æ—p†
-  Graphics buf_gc; // ƒOƒ‰ƒtƒBƒbƒNƒXƒRƒ“ƒeƒLƒXƒg
-  Cha01    ch01;   // –îˆóƒL[‚Å‘€ì‰Â”\‚ÈƒLƒƒƒ‰ƒNƒ^‚ÌƒNƒ‰ƒX
+  int  w=640*2, h=320*2;//ç”»é¢ã®å¤§ãã•
+  int COL =50; //æ¨ªã®ãƒ–ãƒ­ãƒƒã‚¯ã®æ•°
+  int bw = 64*COL;//ã‚¹ãƒ†ãƒ¼ã‚¸æ¨ªã®å¤§ãã•
+  int bh= 64*10;//ã‚¹ãƒ†ãƒ¼ã‚¸ç¸¦ã®å¤§ãã•
+  Thread   th;     // ã‚¹ãƒ¬ãƒƒãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+  Image    buf;    // ä»®ã®ç”»ç”¨ç´™
+  Graphics buf_gc; // ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+  Cha01    ch01;   // çŸ¢å°ã‚­ãƒ¼ã§æ“ä½œå¯èƒ½ãªã‚­ãƒ£ãƒ©ã‚¯ã‚¿ã®ã‚¯ãƒ©ã‚¹
   Teki teki ,tekib,tekim ,tekib2;
   Map map;
   Dimension d,D;
   int Y,xr =0;
-  int mode =0;//‰Šú‰æ–Ê
-  int s=32;//l‚ÌƒTƒCƒY
-  int dcnt=0;//€–SŠÔ
-  /*Šm”F—p
+  int mode =0;//åˆæœŸç”»é¢
+  int s=32;//äººã®ã‚µã‚¤ã‚º
+  int dcnt=0;//æ­»äº¡æ™‚é–“
+  /*ç¢ºèªç”¨
   int check=0;
   int map_colli=0;
   int map_colli2=0;*/
   int coin=0;
-  double X,VX=1.0;//VX‚ÍƒXƒNƒ[ƒ‹‚Ì‘¬‚³
-  boolean spacef ,gcnt ,dl , item=false; //space‚ª‚¨‚³‚ê‚½,@ƒQ[ƒ€I—¹”»’è,@€–S”»’è,@@ƒAƒCƒeƒ€ƒQƒbƒg
-  int coindouble=0;//ƒTƒ{ƒeƒ“‚Ì“¯ƒQƒbƒg‰ñ”
+  double X,VX=1.0;//VXã¯ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã®é€Ÿã•
+  boolean spacef ,gcnt ,dl , item=false; //spaceãŒãŠã•ã‚ŒãŸ,ã€€ã‚²ãƒ¼ãƒ çµ‚äº†åˆ¤å®š,ã€€æ­»äº¡åˆ¤å®š,ã€€ã€€ã‚¢ã‚¤ãƒ†ãƒ ã‚²ãƒƒãƒˆ
+  int coindouble=0;//ã‚µãƒœãƒ†ãƒ³ã®åŒæ™‚ã‚²ãƒƒãƒˆå›æ•°
   Font f1 =new Font("Serif",Font.PLAIN,10);
   Fonts font1 ,font2,font3,font4,font5;
   
  
-  Image imgBack = getToolkit().getImage("img/haikei3.jpeg");//‰æ‘œ‚Ì“Ç‚İ‚İ
-  Image imgdead = getToolkit().getImage("img/deadpic.png");//‰æ‘œ‚Ì“Ç‚İ‚İ
+  Image imgBack = getToolkit().getImage("img/haikei3.jpeg");//ç”»åƒã®èª­ã¿è¾¼ã¿
+  Image imgdead = getToolkit().getImage("img/deadpic.png");//ç”»åƒã®èª­ã¿è¾¼ã¿
   Image imgef1 = getToolkit().getImage("img/effect_red.png");
   Image imgefy = getToolkit().getImage("img/effect_yellow.png");
   Image imggo = getToolkit().getImage("img/go2.jpg");
   Image imgclr = getToolkit().getImage("img/gameclear.png");
   Image imgmi = getToolkit().getImage("img/mission2.png");
   Image imgmain = getToolkit().getImage("img/main.jpg");
-  // ¡ ƒƒCƒ“ƒƒ\ƒbƒhiƒXƒ^[ƒg’n“_j
+  // â–  ãƒ¡ã‚¤ãƒ³ãƒ¡ã‚½ãƒƒãƒ‰ï¼ˆã‚¹ã‚¿ãƒ¼ãƒˆåœ°ç‚¹ï¼‰
   public static void main(String [] args) {
     GameMaster ac = new GameMaster(); 
   }
 
-  // ¡ ƒRƒ“ƒXƒgƒ‰ƒNƒ^i‰Šúİ’èj
+  // â–  ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ˆåˆæœŸè¨­å®šï¼‰
   GameMaster() {
-    super("GameMaster");  // eƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^ŒÄ‚Ño‚µ
-    this.setSize(w+10, h+10); // ƒtƒŒ[ƒ€‚Ì‰Šúİ’è
-    this.setVisible(true);  // ƒtƒŒ[ƒ€‚ğ‰Â‹‰»
-    this.addKeyListener(this);   // (KeyListener)ƒŠƒXƒi“o˜^
-    this.requestFocusInWindow(); // (KeyListener)ƒtƒH[ƒJƒX‚ğ“¾‚é
+    super("GameMaster");  // è¦ªã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼ã³å‡ºã—
+    this.setSize(w+10, h+10); // ãƒ•ãƒ¬ãƒ¼ãƒ ã®åˆæœŸè¨­å®š
+    this.setVisible(true);  // ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’å¯è¦–åŒ–
+    this.addKeyListener(this);   // (KeyListener)ãƒªã‚¹ãƒŠç™»éŒ²
+    this.requestFocusInWindow(); // (KeyListener)ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ã‚’å¾—ã‚‹
 
-    font1  =new Fonts();//ƒtƒHƒ“ƒg‚Ìí—Ş
+    font1  =new Fonts();//ãƒ•ã‚©ãƒ³ãƒˆã®ç¨®é¡
     font2  =new Fonts();
     font3 =new Fonts();
     font4  =new Fonts();
     font5  =new Fonts();
 
 
-    ch01 = new Cha01();     // Cha01 ƒNƒ‰ƒX‚ÌƒIƒuƒWƒFƒNƒg‚ğì¬
-    ch01.cGetImage(this);   // ch01 ‚É‚Â‚¢‚ÄƒLƒƒƒ‰ƒNƒ^‚Ì‰æ‘œ‚ğæ“¾
+    ch01 = new Cha01();     // Cha01 ã‚¯ãƒ©ã‚¹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
+    ch01.cGetImage(this);   // ch01 ã«ã¤ã„ã¦ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ã®ç”»åƒã‚’å–å¾—
     ch01.w=bw;
     ch01.h=h;
     //ch01.x =1728;
@@ -66,36 +66,36 @@ public class GameMaster extends Frame implements Runnable, KeyListener {
     //ch01.GRAVITY=0.8;
     ch01.y=512;
     ch01.ufcnt=true;
-    ch01.hp=3;//ƒvƒŒƒCƒ„[‚ÌHP‚Í3
+    ch01.hp=3;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPã¯3
 
-    teki = new Teki();//ƒXƒ‰ƒCƒ€
-    tekib =new Teki();//’¹•
-    tekim=new Teki();//–‚–@g‚¢
-    tekib2 =new Teki();//’¹Ô
-    teki.tGetImage(this,"img/monster/ƒXƒ‰ƒCƒ€/ƒXƒ‰ƒCƒ€A_ˆÚ“®000.png" ,"img/monster/ƒXƒ‰ƒCƒ€/ƒXƒ‰ƒCƒ€A_ˆÚ“®001.png","img/monster/ƒXƒ‰ƒCƒ€/ƒXƒ‰ƒCƒ€A_ˆÚ“®002.png ","img/monster/ƒXƒ‰ƒCƒ€/ƒXƒ‰ƒCƒ€A_ˆÚ“®003.png" );
-    tekib.tGetImage(this,"img/monster/’¹/’¹A_ˆÚ“®000.png" ,"img/monster/’¹/’¹A_ˆÚ“®001.png","img/monster/’¹/’¹A_ˆÚ“®002.png","img/monster/’¹/’¹A_ˆÚ“®003.png");
-    tekim.tGetImage(this,"img/monster/–‚–@g‚¢/–‚–@g‚¢A_ˆÚ“®000.png" ,"img/monster/–‚–@g‚¢/–‚–@g‚¢A_ˆÚ“®001.png","img/monster/–‚–@g‚¢/–‚–@g‚¢A_ˆÚ“®002.png","img/monster/–‚–@g‚¢/–‚–@g‚¢A_ˆÚ“®003.png");
-    tekib2.tGetImage(this,"img/monster/’¹/’¹B_ˆÚ“®000.png" ,"img/monster/’¹/’¹B_ˆÚ“®001.png","img/monster/’¹/’¹B_ˆÚ“®002.png","img/monster/’¹/’¹B_ˆÚ“®003.png");
-    //“G‚Ì‰ŠúˆÊ’u‚Æ‘å‚«‚³
+    teki = new Teki();//ã‚¹ãƒ©ã‚¤ãƒ 
+    tekib =new Teki();//é³¥é»’
+    tekim=new Teki();//é­”æ³•ä½¿ã„
+    tekib2 =new Teki();//é³¥èµ¤
+    teki.tGetImage(this,"img/monster/ã‚¹ãƒ©ã‚¤ãƒ /ã‚¹ãƒ©ã‚¤ãƒ A_ç§»å‹•000.png" ,"img/monster/ã‚¹ãƒ©ã‚¤ãƒ /ã‚¹ãƒ©ã‚¤ãƒ A_ç§»å‹•001.png","img/monster/ã‚¹ãƒ©ã‚¤ãƒ /ã‚¹ãƒ©ã‚¤ãƒ A_ç§»å‹•002.png ","img/monster/ã‚¹ãƒ©ã‚¤ãƒ /ã‚¹ãƒ©ã‚¤ãƒ A_ç§»å‹•003.png" );
+    tekib.tGetImage(this,"img/monster/é³¥/é³¥A_ç§»å‹•000.png" ,"img/monster/é³¥/é³¥A_ç§»å‹•001.png","img/monster/é³¥/é³¥A_ç§»å‹•002.png","img/monster/é³¥/é³¥A_ç§»å‹•003.png");
+    tekim.tGetImage(this,"img/monster/é­”æ³•ä½¿ã„/é­”æ³•ä½¿ã„A_ç§»å‹•000.png" ,"img/monster/é­”æ³•ä½¿ã„/é­”æ³•ä½¿ã„A_ç§»å‹•001.png","img/monster/é­”æ³•ä½¿ã„/é­”æ³•ä½¿ã„A_ç§»å‹•002.png","img/monster/é­”æ³•ä½¿ã„/é­”æ³•ä½¿ã„A_ç§»å‹•003.png");
+    tekib2.tGetImage(this,"img/monster/é³¥/é³¥B_ç§»å‹•000.png" ,"img/monster/é³¥/é³¥B_ç§»å‹•001.png","img/monster/é³¥/é³¥B_ç§»å‹•002.png","img/monster/é³¥/é³¥B_ç§»å‹•003.png");
+    //æ•µã®åˆæœŸä½ç½®ã¨å¤§ãã•
     teki.y=512+4;teki.s=64;
     tekib.y=64*2;tekib.s=96;
     tekib2.x=64*48;tekib2.y=64*4;tekib2.s=96;
     tekim.x=64*(50-6);tekim.y=64*2;tekim.s=32*4;
     //tekib.tGetImage()
-    d = this.getSize();     // ‰æ–Ê‚Ì‘å‚«‚³æ“¾
+    d = this.getSize();     // ç”»é¢ã®å¤§ãã•å–å¾—
 
     map =new Map();
     map.mGetImage(this);
-    map.row= 10;// —ñ”
-    map.col =COL;//s”
+    map.row= 10;// åˆ—æ•°
+    map.col =COL;//è¡Œæ•°
     map.w=bw/2;
     map.load();
     //  map.cof=false;
 
-    // ƒXƒŒƒbƒh‚Ì‰Šúİ’è
-    th = new Thread(this); // ƒXƒŒƒbƒhƒIƒuƒWƒFƒNƒg‚ÌV‹Kì¬
-    th.start();            // ƒXƒŒƒbƒh‚ÌŠJn
-    //=====ƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚ê‚é‚æ‚¤‚É‚·‚é=====
+    // ã‚¹ãƒ¬ãƒƒãƒ‰ã®åˆæœŸè¨­å®š
+    th = new Thread(this); // ã‚¹ãƒ¬ãƒƒãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ–°è¦ä½œæˆ
+    th.start();            // ã‚¹ãƒ¬ãƒƒãƒ‰ã®é–‹å§‹
+    //=====ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‰ã˜ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹=====
     addWindowListener(new WindowAdapter() {
     @Override
       public void windowClosing(WindowEvent e) {
@@ -104,73 +104,73 @@ public class GameMaster extends Frame implements Runnable, KeyListener {
       });
   }
 
-  public void run() {  // (thread) 40 msec –ˆ‚ÉÀs‚·‚é
+  public void run() {  // (thread) 40 msec æ¯ã«å®Ÿè¡Œã™ã‚‹
     try {
       while(true) {
-	repaint();        // Ä•`‰æ‚ğ—v‹‚·‚é repaint() ‚Í update() ‚ğŒÄ‚Ño‚·
-	Thread.sleep(17); // ƒEƒBƒ“ƒhƒE‚ğXV‚·‚é‘O‚É‹x~ 25fps=1000msec/40msec
+	repaint();        // å†æç”»ã‚’è¦æ±‚ã™ã‚‹ repaint() ã¯ update() ã‚’å‘¼ã³å‡ºã™
+	Thread.sleep(17); // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æ›´æ–°ã™ã‚‹å‰ã«ä¼‘æ­¢ 25fps=1000msec/40msec
       }
     }
     catch(Exception e) {
     }
   }
 
-  // ¡ ƒƒ\ƒbƒh
-  // paint() ‚Í Frame ƒNƒ‰ƒX‚Ìƒƒ\ƒbƒh
-  // ’†g‚ğã‘‚«‚·‚éiƒI[ƒo[ƒ‰ƒCƒhj
-  // paint() ‚Í thread ‚É‚æ‚è 40msec –ˆ‚É repaint() ‚ğ‰î‚µ‚ÄŒÄ‚Î‚ê‚é
+  // â–  ãƒ¡ã‚½ãƒƒãƒ‰
+  // paint() ã¯ Frame ã‚¯ãƒ©ã‚¹ã®ãƒ¡ã‚½ãƒƒãƒ‰
+  // ä¸­èº«ã‚’ä¸Šæ›¸ãã™ã‚‹ï¼ˆã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ï¼‰
+  // paint() ã¯ thread ã«ã‚ˆã‚Š 40msec æ¯ã« repaint() ã‚’ä»‹ã—ã¦å‘¼ã°ã‚Œã‚‹
   public void paint(Graphics gc) { //
-    // ˆÈ‰º‚ÅC–ˆ‰ñ
-    // 1. ‰æ–Ê‚ÌƒTƒCƒY‚ğæ“¾
-    // 2. buffer ƒCƒ[ƒW‚Ì‘¶İƒ`ƒFƒbƒN
-    // 3. buffer —p gc ‚Ì‘¶İƒ`ƒFƒbƒN
-    // ‚ğs‚¤D‚±‚ê‚Í buffer ‚ªì‚ç‚ê‚éƒ^ƒCƒ~ƒ“ƒO‚Ì–â‘è‚Å
-    // NullPointerException ‚ª¶‚¶‚é‚Ì‚ğ–h‚®ˆ×B  
+    // ä»¥ä¸‹ã§ï¼Œæ¯å›
+    // 1. ç”»é¢ã®ã‚µã‚¤ã‚ºã‚’å–å¾—
+    // 2. buffer ã‚¤ãƒ¡ãƒ¼ã‚¸ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
+    // 3. buffer ç”¨ gc ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
+    // ã‚’è¡Œã†ï¼ã“ã‚Œã¯ buffer ãŒä½œã‚‰ã‚Œã‚‹ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã®å•é¡Œã§
+    // NullPointerException ãŒç”Ÿã˜ã‚‹ã®ã‚’é˜²ãç‚ºã€‚  
 
     if (buf == null)
-      buf = createImage(bw, d.height); // buffer ‚ğ‰æ–Ê‚Æ“¯ƒTƒCƒY‚Åì¬
+      buf = createImage(bw, d.height); // buffer ã‚’ç”»é¢ã¨åŒã‚µã‚¤ã‚ºã§ä½œæˆ
     if (buf_gc == null)
       buf_gc = buf.getGraphics();
 
-    // buf i‰¼‚Ì‰æ—p†j‚ğ•`‰æ‚·‚é
-    buf_gc.setColor(Color.black);          // gc ‚ÌF‚ğ•‚É
-    buf_gc.fillRect(0,0,d.width,d.height); // gc ‚ğg‚Á‚ÄlŠp‚ğ•`‚­
+    // buf ï¼ˆä»®ã®ç”»ç”¨ç´™ï¼‰ã‚’æç”»ã™ã‚‹
+    buf_gc.setColor(Color.black);          // gc ã®è‰²ã‚’é»’ã«
+    buf_gc.fillRect(0,0,d.width,d.height); // gc ã‚’ä½¿ã£ã¦å››è§’ã‚’æã
 
-    switch(mode){//ƒQ[ƒ€‰æ–Êƒmƒ‚[ƒh
-      case 0://•\†@ƒz[ƒ€‰æ–Ê
+    switch(mode){//ã‚²ãƒ¼ãƒ ç”»é¢ãƒãƒ¢ãƒ¼ãƒ‰
+      case 0://è¡¨ç´™ã€€ãƒ›ãƒ¼ãƒ ç”»é¢
         buf_gc.setColor(Color.yellow);
         buf_gc.fillRect(0,0 ,w, h);
         buf_gc.drawImage(imgBack, 0, Y,w,h, this); 
 
-        //˜g‚Ì‚È‚©
+        //æ ã®ãªã‹
         buf_gc.setColor(Color.black);
         buf_gc.fillRect(64+32,32+12, w-64*4+32, h/2-32*2);
         Graphics2D g2 = (Graphics2D)buf_gc;
         BasicStroke bs = new BasicStroke(20);
 		    g2.setStroke(bs);
-        //˜g
+        //æ 
         buf_gc.setColor(Color.red);
         buf_gc.drawRect(64+32,32+12, w-64*4+32, h/2-32*2);
-        //•¶Í‚ğ•\¦
-        map.sabotenn(buf_gc,64+32*6,h/2+64,64,"~15 ‚ğW‚ß‚ÄƒS[ƒ‹‚µ‚æ‚¤");
+        //æ–‡ç« ã‚’è¡¨ç¤º
+        map.sabotenn(buf_gc,64+32*6,h/2+64,64,"Ã—15 ã‚’é›†ã‚ã¦ã‚´ãƒ¼ãƒ«ã—ã‚ˆã†");
         buf_gc.setColor(Color.yellow);
-        font1.Fon(buf_gc , "‰¡ƒXƒNƒ[ƒ‹Œ^ƒAƒNƒVƒ‡ƒ“ƒQ[ƒ€" ,  64,64*2,64*2 );
+        font1.Fon(buf_gc , "æ¨ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«å‹ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚²ãƒ¼ãƒ " ,  64,64*2,64*2 );
         buf_gc.setColor(Color.white);
-        font1.Fon(buf_gc , "ƒTƒ{ƒeƒ“‚ ‚Â‚ß" ,  96,w/2-96*4,64*4  );
+        font1.Fon(buf_gc , "ã‚µãƒœãƒ†ãƒ³ã‚ã¤ã‚" ,  96,w/2-96*4,64*4  );
         buf_gc.setColor(Color.black);
         font1.Fon(buf_gc , "---PUSH SPACE---" ,  32,w/2-32*4,h-64 );
         buf_gc.setColor(Color.black);
-        font4.Fon(buf_gc , "ŠwĞ”Ô†:" , 32,w-10*32,h-64  );
+        font4.Fon(buf_gc , "å­¦ç±ç•ªå·:" , 32,w-10*32,h-64  );
         buf_gc.setColor(Color.black);
-        font5.Fon(buf_gc , "ì¬Ò:‰ª“c‘s‰›" ,  32,w-9*32,h-64+32);
+        font5.Fon(buf_gc , "ä½œæˆè€…:otake-code" ,  32,w-9*32,h-64+32);
 
-        gc.drawImage(buf, 0, 0, this); // •\‚Ì‰æ—p†‚É— ‚Ì‰æ—p† (buf) ‚Ì“à—e‚ğ“\‚è•t‚¯‚é
+        gc.drawImage(buf, 0, 0, this); // è¡¨ã®ç”»ç”¨ç´™ã«è£ã®ç”»ç”¨ç´™ (buf) ã®å†…å®¹ã‚’è²¼ã‚Šä»˜ã‘ã‚‹
         break;
 
 
-      case 1://game ’†
+      case 1://game ä¸­
 
-         //‰Šú‰»
+         //åˆæœŸåŒ–
          if(gcnt==true){
           ch01.x=60; ch01.y=512;//x=ch01.cnt
           ch01.vy=0;
@@ -191,44 +191,44 @@ public class GameMaster extends Frame implements Runnable, KeyListener {
         }
         
         
-        //==offset@ˆÚ“®‚µ‚½‰æ–Ê‚ÌˆÊ’u
+        //==offsetã€€ç§»å‹•ã—ãŸç”»é¢ã®ä½ç½®
         int offsetX = d.width / 2 - (int)ch01.x;
-        // ƒ}ƒbƒv‚Ì’[‚Å‚ÍƒXƒNƒ[ƒ‹‚µ‚È‚¢‚æ‚¤‚É‚·‚é
+        // ãƒãƒƒãƒ—ã®ç«¯ã§ã¯ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã—ãªã„ã‚ˆã†ã«ã™ã‚‹
         offsetX = Math.min(offsetX, 0);
         offsetX = Math.max(offsetX, d.width - bw);
 
-        //”wŒi
+        //èƒŒæ™¯
         buf_gc.drawImage(imgBack, 0, Y,w,h, this); 
 
-        //ƒRƒCƒ“ƒQƒbƒg
+        //ã‚³ã‚¤ãƒ³ã‚²ãƒƒãƒˆ
         if (map.coinf ||map.coinf2&&!map.double_coin){
           coin+=1;
         }
-        if (map.double_coin){//“¯‚ÉƒQƒbƒg
+        if (map.double_coin){//åŒæ™‚ã«ã‚²ãƒƒãƒˆ
           coin+=2;
         }
-        //ƒAƒCƒeƒ€ƒQƒbƒg
-        if (map.blockID==99){//ƒ‰ƒ“ƒ_ƒ€‚ÅŒø‰Ê‚ğ•Ï‚¦‚é
+        //ã‚¢ã‚¤ãƒ†ãƒ ã‚²ãƒƒãƒˆ
+        if (map.blockID==99){//ãƒ©ãƒ³ãƒ€ãƒ ã§åŠ¹æœã‚’å¤‰ãˆã‚‹
           item=true;
         }
-        //ƒ}ƒbƒv‚ğ•`‰æ
+        //ãƒãƒƒãƒ—ã‚’æç”»
         map.mDraw(buf_gc , (int)offsetX,0);
         map.mUpdate();
 
-        //ƒLƒƒƒ‰ƒNƒ^[‚ğ•`‰æ
-        ch01.cDraw(buf_gc,offsetX,0); // ‰¼‚Ì‰æ—p†‚Ì GC ‚ğ Cha01 ‚ÌƒIƒuƒWƒFƒNƒg‚É“n‚·
+        //ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚’æç”»
+        ch01.cDraw(buf_gc,offsetX,0); // ä»®ã®ç”»ç”¨ç´™ã® GC ã‚’ Cha01 ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«æ¸¡ã™
         //HP
         ch01.cHP(buf_gc ,ch01.hp);
-        //ƒQƒbƒg‚µ‚½ƒTƒ{ƒeƒ“
+        //ã‚²ãƒƒãƒˆã—ãŸã‚µãƒœãƒ†ãƒ³
         map.mCoin(buf_gc,coin);
-        //ƒAƒCƒeƒ€Œø‰Ê
+        //ã‚¢ã‚¤ãƒ†ãƒ åŠ¹æœ
         if(item)ch01.onestep=8; // 
-        ch01.cUpdate(offsetX, map.cof, map.cof2,map.block_x,map.block_y); // ƒLƒƒƒ‰ƒNƒ^‚Ìƒpƒ‰ƒ[ƒ^XV
-        //Õ“Ë”»’è
+        ch01.cUpdate(offsetX, map.cof, map.cof2,map.block_x,map.block_y); // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ›´æ–°
+        //è¡çªåˆ¤å®š
         map.colli(ch01.newX, ch01.y   ,offsetX,0);
         map.colli2(  ch01.x , ch01.newY,offsetX,0);
 
-        //“G
+        //æ•µ
         teki.tDraw(buf_gc,offsetX,0,true);
         teki.tUpdate();
         tekib.tDraw(buf_gc,offsetX,0,true);
@@ -240,19 +240,19 @@ public class GameMaster extends Frame implements Runnable, KeyListener {
 
         buf_gc.setColor(Color.black);
 
-        //if(ch01.onFace==true) check+=1;//Õ“Ë‰ñ”
+        //if(ch01.onFace==true) check+=1;//è¡çªå›æ•°
         //if(map.cof==true)map_colli +=1;
-        //ƒ~ƒbƒVƒ‡ƒ“
+        //ãƒŸãƒƒã‚·ãƒ§ãƒ³
         //buf_gc.drawImage(imgmi, 16 ,32-4+16,640/3+64,320/4+32, this);  
-        int Mute =teki.Muteki+ tekib.Muteki+tekib2.Muteki+tekim.Muteki; //–³“G‚ğ•t—^‚µ‚Ä‚¢‚éŠÔ
+        int Mute =teki.Muteki+ tekib.Muteki+tekib2.Muteki+tekim.Muteki; //ç„¡æ•µã‚’ä»˜ä¸ã—ã¦ã„ã‚‹æ™‚é–“
 
 
-        //=============-ó‹µ‚ğ¶ã‚É•\¦iƒQ[ƒ€‚É‚ÍŠÖŒW‚È‚¢j=========================
-        //ƒLƒƒƒ‰‚ÌˆÊ’u‘¬“xAÚ‚µ‚½ƒuƒƒbƒN‚ÌˆÊ’uAoffset‚È‚Ç‚ğƒŠƒAƒ‹ƒ^ƒCƒ€‚ÅŠm”F‚·‚é—p
+        //=============-çŠ¶æ³ã‚’å·¦ä¸Šã«è¡¨ç¤ºï¼ˆã‚²ãƒ¼ãƒ ã«ã¯é–¢ä¿‚ãªã„ï¼‰=========================
+        //ã‚­ãƒ£ãƒ©ã®ä½ç½®é€Ÿåº¦ã€æ¥ã—ãŸãƒ–ãƒ­ãƒƒã‚¯ã®ä½ç½®ã€offsetãªã©ã‚’ãƒªã‚¢ãƒ«ã‚¿ã‚¤ãƒ ã§ç¢ºèªã™ã‚‹ç”¨
         buf_gc.setFont(f1);
         int i=0;
         if(ch01.onGround)i+=1;
-        //ƒRƒCƒ“‚É“–‚½‚Á‚½‚©‚Ç‚¤‚©
+        //ã‚³ã‚¤ãƒ³ã«å½“ãŸã£ãŸã‹ã©ã†ã‹
         int coin2=0;
         if(map.coinf2)coin2+=1;
         int coin1=0;
@@ -263,114 +263,114 @@ public class GameMaster extends Frame implements Runnable, KeyListener {
         
         double[] num ={(double)coindouble ,(double)map.cnt3 ,ch01.x ,ch01.y,offsetX,(double)Mute,ch01.vy ,i,map.block_x,map.block_y -64 ,map.blockID};
         String[] name =
-        { "X²‚ÌÕ“Ë= ",
-          "Y²‚ÌÕ“Ë= ",
-          "ƒvƒŒƒCƒ„[‚ÌxÀ•W ch01.x = ",
-          "ƒvƒŒƒCƒ„[‚ÌxÀ•W ch01.y = ",
+        { "Xè»¸ã®è¡çª= ",
+          "Yè»¸ã®è¡çª= ",
+          "ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®xåº§æ¨™ ch01.x = ",
+          "ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®xåº§æ¨™ ch01.y = ",
           "offsetX = ",
-          "ALL –³“GŠÔ= ",
+          "ALL ç„¡æ•µæ™‚é–“= ",
           "vy = ",
           "onGround = ",
-          "ƒuƒƒbƒN‚Ì¶‰ºÀ•WX = ",
-          "ƒuƒƒbƒN‚Ì¶‰ºÀ•WY = ",
-          "ƒuƒƒbƒN‚ÌID = "
+          "ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ä¸‹åº§æ¨™X = ",
+          "ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ä¸‹åº§æ¨™Y = ",
+          "ãƒ–ãƒ­ãƒƒã‚¯ã®ID = "
         };
         String str[] = new String[num.length];
 
         for(int j=0 ;j< num.length ; j++){
           str[j] = String.valueOf(num[j]);
-          //buf_gc.drawString(name[j]+str[j],64*3/2,64*3/2 +10*j);@//–{”Ô‚Í‚±‚Ì•¶‚ğƒRƒƒ“ƒgƒAƒEƒg‚·‚é
+          //buf_gc.drawString(name[j]+str[j],64*3/2,64*3/2 +10*j);ã€€//æœ¬ç•ªã¯ã“ã®æ–‡ã‚’ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆã™ã‚‹
         }
         //===============================================        
         
-        //==“G¶¬
+        //==æ•µç”Ÿæˆ
         if (teki.hp==0||tekib.hp==0||tekim.hp==0||tekib2.hp==0){
-          //ƒŠƒXƒ|[ƒ“‚µ‚½“G‚Ì‚˜‚â‘¬“x‚ğ•ÏX‰Â”\
-          if(Math.random()<0.4/60 &&teki.hp==0){//ƒ‰ƒ“ƒ_ƒ€¶¬ Šm—¦20% 
+          //ãƒªã‚¹ãƒãƒ¼ãƒ³ã—ãŸæ•µã®ï½˜ã‚„é€Ÿåº¦ã‚’å¤‰æ›´å¯èƒ½
+          if(Math.random()<0.4/60 &&teki.hp==0){//ãƒ©ãƒ³ãƒ€ãƒ ç”Ÿæˆ ç¢ºç‡20% 
             teki.hp=1;             
           }
-          if(Math.random()<60/60&&tekib.hp==0){//ƒ‰ƒ“ƒ_ƒ€¶¬ Šm—¦100%    
+          if(Math.random()<60/60&&tekib.hp==0){//ãƒ©ãƒ³ãƒ€ãƒ ç”Ÿæˆ ç¢ºç‡100%    
             tekib.hp=1;             
             tekib.x=64*49;
             tekib.vx=2;
           }
-          if(Math.random()<60/60&&tekib2.hp==0){//ƒ‰ƒ“ƒ_ƒ€¶¬ Šm—¦100%   
+          if(Math.random()<60/60&&tekib2.hp==0){//ãƒ©ãƒ³ãƒ€ãƒ ç”Ÿæˆ ç¢ºç‡100%   
             tekib2.hp=1;             
             tekib2.x=64*49;
             tekib2.vx=3;
           }
-          if(Math.random()<60/60&&tekim.hp==00){//ƒ‰ƒ“ƒ_ƒ€¶¬ Šm—¦100%    
+          if(Math.random()<60/60&&tekim.hp==00){//ãƒ©ãƒ³ãƒ€ãƒ ç”Ÿæˆ ç¢ºç‡100%    
             tekim.hp=1;             
           }
         }
-        //ƒLƒƒƒ‰‚Æ‚ÌÕ“Ë”»’è
+        //ã‚­ãƒ£ãƒ©ã¨ã®è¡çªåˆ¤å®š
         teki.tcol(teki , ch01.x,ch01.y ,0 ,teki.Muteki);
         tekib.tcol(tekib , ch01.x,ch01.y ,0,tekib.Muteki);
         tekib2.tcol(tekib2 , ch01.x,ch01.y ,0,tekib2.Muteki);
         //tekim.s=tekim.s/2;
         tekim.tcol(tekim , ch01.x,ch01.y , tekim.s*3/4,tekim.Muteki);
       
-        //HP‚ª‚ ‚è‚©‚Â–³“G‚ª•t—^‚³‚ê‚½HPŒ¸­
+        //HPãŒã‚ã‚Šã‹ã¤ç„¡æ•µãŒä»˜ä¸ã•ã‚ŒãŸHPæ¸›å°‘
         if(ch01.hp>0 && Mute==1) {
           ch01.hp-=1;      
           //teki.tekicolli=tekib.tekicolli =tekim.tekicolli=false;
         }
-        //“G‚Æ“–‚½‚Á‚½‚çÔ‚¢ƒGƒtƒFƒNƒg‚ª‚Å‚é
+        //æ•µã¨å½“ãŸã£ãŸã‚‰èµ¤ã„ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãŒã§ã‚‹
         if(ch01.hp>0 && Mute>=1&&Mute <=60)buf_gc.drawImage(imgef1,(int)ch01.x+offsetX,(int)ch01.y,96,96, this); 
-        //€–SğŒ‚ª‚»‚ë‚Á‚½‚ç€–S‚·‚é
+        //æ­»äº¡æ¡ä»¶ãŒãã‚ã£ãŸã‚‰æ­»äº¡ã™ã‚‹
         if(map.blockID==38 || ch01.y==640+64|| map.blockID==91||ch01.hp==0) { 
           dl=true;
         }
-        //€–SŒã0.5•b‚Í‰æ–Ê‘JˆÚ‚µ‚È‚¢
+        //æ­»äº¡å¾Œ0.5ç§’ã¯ç”»é¢é·ç§»ã—ãªã„
         if(dl==true){
           dcnt+=1;
           
           if(dcnt<30 &&dcnt >=0){
-            //ƒS[ƒ‹‚É’…‚¢‚½‚ç
+            //ã‚´ãƒ¼ãƒ«ã«ç€ã„ãŸã‚‰
             if(map.blockID==38)buf_gc.drawImage(imgefy,(int)ch01.x+offsetX-dcnt*20,(int)ch01.y -dcnt*20,96+dcnt*40,96+dcnt*40, this); 
               
-            if(map.blockID==91)ch01.x=64*23.25;//ƒ}ƒOƒ}‚É—‚¿‚½‚ç
-            //‚»‚Ì‚Ù‚©
+            if(map.blockID==91)ch01.x=64*23.25;//ãƒã‚°ãƒã«è½ã¡ãŸã‚‰
+            //ãã®ã»ã‹
             else if(map.blockID!=38) buf_gc.drawImage(imgef1,(int)ch01.x+offsetX,(int)ch01.y,96,96, this); 
           }
           else {
-            if(map.blockID==38)mode=2;//ƒNƒŠƒA‰æ–Ê‚Ö
-            else mode=-1;//ƒQ[ƒ€ƒI[ƒo[‰æ–Ê‚Ö
+            if(map.blockID==38)mode=2;//ã‚¯ãƒªã‚¢ç”»é¢ã¸
+            else mode=-1;//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ç”»é¢ã¸
           }
         }
 
-       gc.drawImage(buf, 0, 0, this); // •\‚Ì‰æ—p†‚É— ‚Ì‰æ—p† (buf) ‚Ì“à—e‚ğ“\‚è•t‚¯‚é 
+       gc.drawImage(buf, 0, 0, this); // è¡¨ã®ç”»ç”¨ç´™ã«è£ã®ç”»ç”¨ç´™ (buf) ã®å†…å®¹ã‚’è²¼ã‚Šä»˜ã‘ã‚‹ 
 
       break;
 
       case -1: //gameover
       buf_gc.fillRect(0,0 ,w, h);
-      buf_gc.drawImage(imggo, 0,0,w,h, this); //ƒQ[ƒ€ƒI[ƒo[‰æ–Ê‚ğ•\¦
+      buf_gc.drawImage(imggo, 0,0,w,h, this); //ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ç”»é¢ã‚’è¡¨ç¤º
       gcnt=true;
-      gc.drawImage(buf, 0, 0, this); // •\‚Ì‰æ—p†‚É— ‚Ì‰æ—p† (buf) ‚Ì“à—e‚ğ“\‚è•t‚¯‚é
+      gc.drawImage(buf, 0, 0, this); // è¡¨ã®ç”»ç”¨ç´™ã«è£ã®ç”»ç”¨ç´™ (buf) ã®å†…å®¹ã‚’è²¼ã‚Šä»˜ã‘ã‚‹
       break;
 
       case 2: //gameclr
       buf_gc.fillRect(0,0 ,w, h);
-      buf_gc.drawImage(imgclr, 0 ,0,w,h, this); //ƒNƒŠƒA‰æ–Ê‚ğ•\¦
+      buf_gc.drawImage(imgclr, 0 ,0,w,h, this); //ã‚¯ãƒªã‚¢ç”»é¢ã‚’è¡¨ç¤º
       gcnt=true;
-      gc.drawImage(buf, 0, 0, this); // •\‚Ì‰æ—p†‚É— ‚Ì‰æ—p† (buf) ‚Ì“à—e‚ğ“\‚è•t‚¯‚é
+      gc.drawImage(buf, 0, 0, this); // è¡¨ã®ç”»ç”¨ç´™ã«è£ã®ç”»ç”¨ç´™ (buf) ã®å†…å®¹ã‚’è²¼ã‚Šä»˜ã‘ã‚‹
       break;
     }
-    //gc.drawImage(buf, 0, 0, this); // •\‚Ì‰æ—p†‚É— ‚Ì‰æ—p† (buf) ‚Ì“à—e‚ğ“\‚è•t‚¯‚é
+    //gc.drawImage(buf, 0, 0, this); // è¡¨ã®ç”»ç”¨ç´™ã«è£ã®ç”»ç”¨ç´™ (buf) ã®å†…å®¹ã‚’è²¼ã‚Šä»˜ã‘ã‚‹
     
   }   
 
-  // ¡ ƒƒ\ƒbƒh
-  // ‚±‚ê‚ğ“ü‚ê‚È‚¢‚Æƒ_ƒuƒ‹ƒoƒbƒtƒ@ƒŠƒ“ƒO‚µ‚Ä‚à‚¿‚ç‚Â‚­
-  // irepaintƒƒ\ƒbƒh‚ªŒÄ‚Î‚ê‚é‚ÆCupdate ‚ªŒÄ‚Î‚êA‚¢‚Á‚½‚ñ”wŒiF‚Å
-  //  “h‚è‚Â‚Ô‚·ì‹Æ‚ªs‚í‚ê‚é‚½‚ßCupdata ƒƒ\ƒbƒh‚ğƒI[ƒo[ƒ‰ƒCƒh‚µC
-  // ‚»‚Ì‚Ü‚Üpaint ‚ğŒÄ‚Ô‚æ‚¤‚É‚·‚é•K—v‚ª‚ ‚éj
+  // â–  ãƒ¡ã‚½ãƒƒãƒ‰
+  // ã“ã‚Œã‚’å…¥ã‚Œãªã„ã¨ãƒ€ãƒ–ãƒ«ãƒãƒƒãƒ•ã‚¡ãƒªãƒ³ã‚°ã—ã¦ã‚‚ã¡ã‚‰ã¤ã
+  // ï¼ˆrepaintãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã°ã‚Œã‚‹ã¨ï¼Œupdate ãŒå‘¼ã°ã‚Œã€ã„ã£ãŸã‚“èƒŒæ™¯è‰²ã§
+  //  å¡—ã‚Šã¤ã¶ã™ä½œæ¥­ãŒè¡Œã‚ã‚Œã‚‹ãŸã‚ï¼Œupdata ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ï¼Œ
+  // ãã®ã¾ã¾paint ã‚’å‘¼ã¶ã‚ˆã†ã«ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ï¼‰
   public void update(Graphics gc){
     paint(gc);
-    // Šm”F—p@space‰Ÿ‚µ‚½‚ç‰æ–Ê‘JˆÚ
+    // ç¢ºèªç”¨ã€€spaceæŠ¼ã—ãŸã‚‰ç”»é¢é·ç§»
     if(spacef==true){
-      mode+=1; // ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+      mode+=1; // ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
       if(mode>2)mode=0;
       spacef=false;
     }
@@ -381,51 +381,51 @@ public class GameMaster extends Frame implements Runnable, KeyListener {
   public void keyPressed(KeyEvent ke) {
     int cd = ke.getKeyCode();
     switch (cd) {
-    case KeyEvent.VK_SPACE: // [[]ƒL[‚ª‰Ÿ‚³‚ê‚½‚çA
+    case KeyEvent.VK_SPACE: // [ãƒ¼]ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰ã€
       
       break;  
-    case KeyEvent.VK_LEFT:  // [©]ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
-      ch01.lf = true;   // ƒtƒ‰ƒO‚ğ—§‚Ä‚é
-      //	    System.out.println(" [©] pressed");
+    case KeyEvent.VK_LEFT:  // [â†]ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
+      ch01.lf = true;   // ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
+      //	    System.out.println(" [â†] pressed");
       break;
-    case KeyEvent.VK_RIGHT: // [¨]ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
-      ch01.rf = true;   // ƒtƒ‰ƒO‚ğ—§‚Ä‚é
-      //	    System.out.println(" [¨] pressed");
+    case KeyEvent.VK_RIGHT: // [â†’]ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
+      ch01.rf = true;   // ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
+      //	    System.out.println(" [â†’] pressed");
       break;
-    case KeyEvent.VK_UP: // [ª]ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
-      ch01.uf = true;   // ƒtƒ‰ƒO‚ğ—§‚Ä‚é
-      //ch01.ufcnt =true;//‚¨‚µ‚Á‚Ï‚ğ–h‚®
-      //	    System.out.println(" [ª] pressed");
+    case KeyEvent.VK_UP: // [â†‘]ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
+      ch01.uf = true;   // ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
+      //ch01.ufcnt =true;//ãŠã—ã£ã±ã‚’é˜²ã
+      //	    System.out.println(" [â†‘] pressed");
       break;
-    case KeyEvent.VK_DOWN: // [«]ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
-      ch01.df = true;   // ƒtƒ‰ƒO‚ğ—§‚Ä‚é
-      //	    System.out.println(" [«] pressed");
+    case KeyEvent.VK_DOWN: // [â†“]ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
+      ch01.df = true;   // ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
+      //	    System.out.println(" [â†“] pressed");
       break;
     }
   }
   public void keyReleased(KeyEvent ke) {
     int cd = ke.getKeyCode();
     switch (cd) {
-    case KeyEvent.VK_SPACE: // ƒXƒy[ƒXƒL[‚ª—£‚³‚ê‚½‚ç  
-      spacef = true; // ƒtƒ‰ƒO‚ğ~‚ë‚· 
+    case KeyEvent.VK_SPACE: // ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ãŒé›¢ã•ã‚ŒãŸã‚‰  
+      spacef = true; // ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™ 
       break;
       
-    case KeyEvent.VK_LEFT:  // [©]ƒL[‚ª—£‚³‚ê‚½‚ç
-      ch01.lf = false;  // ƒtƒ‰ƒO‚ğ~‚ë‚·
-      //	    System.out.println(" [©] released");
+    case KeyEvent.VK_LEFT:  // [â†]ã‚­ãƒ¼ãŒé›¢ã•ã‚ŒãŸã‚‰
+      ch01.lf = false;  // ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™
+      //	    System.out.println(" [â†] released");
       break;
-    case KeyEvent.VK_RIGHT: // [¨]ƒL[‚ª—£‚³‚ê‚½‚ç
-      ch01.rf = false;  // ƒtƒ‰ƒO‚ğ~‚ë‚·
-      //	    System.out.println(" [¨] released");
+    case KeyEvent.VK_RIGHT: // [â†’]ã‚­ãƒ¼ãŒé›¢ã•ã‚ŒãŸã‚‰
+      ch01.rf = false;  // ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™
+      //	    System.out.println(" [â†’] released");
       break;
-    case KeyEvent.VK_UP: // [ª]ƒL[‚ª—£‚³‚ê‚½‚ç
-      ch01.uf = false;  // ƒtƒ‰ƒO‚ğ~‚ë‚·
-      ch01.ufcnt = true; //‚¨‚µ‚Á‚Ï–h~@—£‚³‚ê‚½‚çÄ“xƒWƒƒƒ“ƒv‚Ì“ü—Í‚ğó‚¯•t‚¯‚é
-      //	    System.out.println(" [ª] released");
+    case KeyEvent.VK_UP: // [â†‘]ã‚­ãƒ¼ãŒé›¢ã•ã‚ŒãŸã‚‰
+      ch01.uf = false;  // ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™
+      ch01.ufcnt = true; //ãŠã—ã£ã±é˜²æ­¢ã€€é›¢ã•ã‚ŒãŸã‚‰å†åº¦ã‚¸ãƒ£ãƒ³ãƒ—ã®å…¥åŠ›ã‚’å—ã‘ä»˜ã‘ã‚‹
+      //	    System.out.println(" [â†‘] released");
       break;
-    case KeyEvent.VK_DOWN: // [«]ƒL[‚ª—£‚³‚ê‚½‚ç
-      ch01.df = false;  // ƒtƒ‰ƒO‚ğ~‚ë‚·
-      //	    System.out.println(" [«] released");
+    case KeyEvent.VK_DOWN: // [â†“]ã‚­ãƒ¼ãŒé›¢ã•ã‚ŒãŸã‚‰
+      ch01.df = false;  // ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™
+      //	    System.out.println(" [â†“] released");
       break;
     }
   }
